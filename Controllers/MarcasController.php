@@ -1,15 +1,14 @@
 <?php
-    include 'Models/DBConexion.php';
-
-    class MarcasController{
-
+    include '../../Models/DBConnection.php';
+   
+    class MarcasController {
         
         public function Create($descripcion, $estado)
         {
             try
             {
                  // Sentencia SQL
-                 $statement = $PDOConnection->prepare("INSERT INTO Marcas(Descripcion, Estado) VALUES (?,?);");
+                 $statement = $dbConnection->prepare("INSERT INTO Marcas (Descripcion, Estado) VALUES (?,?)");
                  $statement->bindParam(1, $descripcion);
                  $statement->bindParam(2, $estado);
                 
@@ -27,7 +26,7 @@
             try
             {
                  // Sentencia SQL
-                 $statement = $PDOConnection->prepare("UPDATE Marcas SET Descripcion = ?, Estado = ? WHERE IdMarca = ?");
+                 $statement = $dbConnection->prepare("UPDATE Marcas SET Descripcion = ?, Estado = ? WHERE IdMarca = ?");
                  $statement->bindParam(1, $descripcion);
                  $statement->bindParam(2, $estado);
                  $statement->bindParam(3, $id);
@@ -46,7 +45,7 @@
             try
             {
                  // Sentencia SQL
-                 $statement = $PDOConnection->prepare("DELETE FROM Marcas WHERE IdMarca = ?");
+                 $statement = $dbConnection->prepare("DELETE FROM Marcas WHERE IdMarca = ?");
                  $statement->bindParam(1, $id);
                 
                 return true;
@@ -60,12 +59,12 @@
 
         public function GetById($id)
         {
-            $statement = $PDOConnection->prepare("SELECT * FROM Marcas WHERE IdMarca=:id");
+            $statement = $dbConnection->prepare("SELECT * FROM Marcas WHERE IdMarca=:id");
             $statement->execute(array(":id"=>$id));
             $editRow = $statement->fetch(PDO::FETCH_ASSOC);
             return $editRow;
         }
-
+      
         public function DataView($query)
         {
             $statement = $PDOConnection->prepare($query);
@@ -77,6 +76,7 @@
                 {
                     ?>
                         <tr>
+                            <td><?php print($row['IdMarca']); ?></td>
                             <td><?php print($row['Descripcion']); ?></td>
                             <td><?php print($row['Estado']); ?></td>
                             <td align="center">
@@ -99,4 +99,6 @@
             }
         }
     }
+
+    $CrudMarca = new MarcasController();
 ?>
