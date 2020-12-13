@@ -1,0 +1,26 @@
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DelMarca`(IN `id` INT)
+DELETE FROM marcas WHERE IdMarca = id$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsMarca`(IN `descripcion` VARCHAR(200), IN `estado` TINYINT(1))
+INSERT INTO marcas (descripcion, estado)
+VALUES (descripcion, estado)$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsMarcas`()
+SELECT IdMarca,
+	Descripcion,
+     CASE WHEN Estado = 1 THEN 'Activa' ELSE 'Inactiva' END Estado
+FROM marcas$$
+DELIMITER ;
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ActMarca`(IN `id` INT, IN `descripcion` VARCHAR(200), IN `estado` TINYINT(1))
+UPDATE marcas
+	SET descripcion = descripcion,
+    	estado = estado
+    WHERE IdMarca = id$$
+DELIMITER ;
