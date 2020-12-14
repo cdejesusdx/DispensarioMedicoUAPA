@@ -1,5 +1,4 @@
-<?php include_once '../../models/connectionDB.php';?>
-
+<?php include_once '../../controllers/marcaController.php';?>
 <?php
     
     if(isset($_POST['btnCreate']))
@@ -14,8 +13,6 @@
             header("Location: create.php?noCreate");
     }
 ?>
-
-<?php include_once '../../header.php';?>
 
 <head>
     

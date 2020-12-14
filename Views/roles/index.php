@@ -1,4 +1,4 @@
-<?php include_once '../../controllers/marcaController.php';?>
+<?php include_once '../../controllers/rolesController.php';?>
 <?php include_once '../../header.php';?>
 
 <head>
@@ -11,7 +11,7 @@
 </head>
 
 <div class="container">
-    <a href="create.php" class="btn btn-large btn-info"><i class="glyphicon glyphicon-plus"></i> &nbsp;Agregar</a>
+    <a href="#" class="btn btn-large btn-info"><i class="glyphicon glyphicon-plus"></i> &nbsp;Agregar</a>
 </div>
 
 <div class="clearfix"></div><br/>
@@ -21,19 +21,19 @@
         <tr>
             <th>#</th>
             <th>Descripción</th>
-            <th style="text-align: center;">Estado</th>
+            <th style="text-align: center;">Activo</th>
             <th colspan="2" style="text-align: center;">Acción</th>
         </tr>
         <?php
-            $query = "CALL ConsMarcas();";       
-            $recordsPerPage = 3;
-            $newQuery = $CrudMarca->paging($query, $recordsPerPage);
-            $CrudMarca->dataView($newQuery);
+            $query = "CALL ConsRoles();";       
+            $recordsPerPage = 5;
+            $newQuery = $CrudRoles->paging($query, $recordsPerPage);
+            $CrudRoles->dataView($newQuery);
         ?>
         <tr>
             <td colspan="7" style="text-align: center;">
                 <div class="pagination-wrap">
-                    <?php $CrudMarca->pagingLink($query, $recordsPerPage); ?>
+                    <?php $CrudRoles->pagingLink($query, $recordsPerPage); ?>
                 </div>
             </td>
         </tr>

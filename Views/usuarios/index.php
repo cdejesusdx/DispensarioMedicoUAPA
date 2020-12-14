@@ -1,4 +1,4 @@
-<?php include_once '../../controllers/marcaController.php';?>
+<?php include_once '../../controllers/usuariosController.php';?>
 <?php include_once '../../header.php';?>
 
 <head>
@@ -20,20 +20,23 @@
     <table class='table table-hover table-responsive'>
         <tr>
             <th>#</th>
-            <th>Descripción</th>
-            <th style="text-align: center;">Estado</th>
-            <th colspan="2" style="text-align: center;">Acción</th>
+            <th>Rol</th>
+            <th>Usuario</th>
+            <th>Nombre</th>
+            <th style="text-align: center;">Activo</th>
+            <th style="text-align: center;">Bloqueado</th>
+            <th colspan=3 style="text-align: center;">Acción</th>
         </tr>
         <?php
-            $query = "CALL ConsMarcas();";       
-            $recordsPerPage = 3;
-            $newQuery = $CrudMarca->paging($query, $recordsPerPage);
-            $CrudMarca->dataView($newQuery);
+            $query = "CALL ConsUsuarios();";       
+            $recordsPerPage = 5;
+            $newQuery = $CrudUsuarios->paging($query, $recordsPerPage);
+            $CrudUsuarios->dataView($newQuery);
         ?>
         <tr>
             <td colspan="7" style="text-align: center;">
                 <div class="pagination-wrap">
-                    <?php $CrudMarca->pagingLink($query, $recordsPerPage); ?>
+                    <?php $CrudUsuarios->pagingLink($query, $recordsPerPage); ?>
                 </div>
             </td>
         </tr>

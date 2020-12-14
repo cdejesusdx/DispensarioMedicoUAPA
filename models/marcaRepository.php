@@ -1,5 +1,5 @@
 <?php
-    class marcasController {
+    class marcaRepository {
         
         private $db;
  

@@ -1,11 +1,11 @@
-<?php include_once '../../controllers/marcaController.php';?>
+<?php include_once '../../controllers/usuariosController.php';?>
 <?php 
    
    if(isset($_GET['deleteId']))
    {
        $id = $_GET['deleteId'];
 
-       if($CrudMarca->delete($id))
+       if($CrudUsuarios->delete($id))
             header("Location: index.php"); 
 
         else

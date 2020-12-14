@@ -14,11 +14,4 @@
     } catch (PDOException $e) {
         echo "Error en la conexión ". $e->getMessage();
     } 
-
-    // INCLUDEs
-    include_once '../../controllers/marcasController.php';
-
-    // CONTROLLES
-    $CrudMarca = new marcasController($PDOConnection);
-
 ?>

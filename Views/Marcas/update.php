@@ -67,7 +67,7 @@
                     <button type="submit" class="btn btn-primary" name="btnUpdate">
                         <span class="glyphicon glyphicon-edit"></span> Actualizar este registro
                     </button>
-                    <a href="index.php" class="btn btn-large btn-success"><i class="glyphicon glyphicon-backward"></i>&nbsp Cancelar</a>
+                    <a href="index.php" class="btn btn-large btn-success"><i class="glyphicon glyphicon-backward"></i>&nbsp Regresar</a>
                 </td>
             </tr>
         </table>
