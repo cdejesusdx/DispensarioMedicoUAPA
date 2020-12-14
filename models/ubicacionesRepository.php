@@ -64,6 +64,15 @@
             }
         }
 
+        public function getAll()
+        {
+            $statement = $this->db->prepare("CALL ConsUbicaciones();");
+            $statement->execute();
+            $listRows = $statement->fetchAll(PDO::FETCH_OBJ);         
+            
+            return $listRows;
+        }
+
         public function getById($id)
         {
             $statement = $this->db->prepare("SELECT * FROM Ubicaciones WHERE IdUbicacion = ?");
@@ -108,7 +117,7 @@
             {
                 ?>
                     <tr>
-                        <td>No hay registro...</td>
+                        <td colspan="10">No hay registro...</td>
                     </tr>
                 <?php
             }

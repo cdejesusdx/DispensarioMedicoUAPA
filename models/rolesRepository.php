@@ -113,7 +113,7 @@
             {
                 ?>
                     <tr>
-                        <td>No hay registro...</td>
+                        <td colspan="10">No hay registro...</td>
                     </tr>
                 <?php
             }

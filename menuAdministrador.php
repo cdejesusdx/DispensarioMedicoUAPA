@@ -19,7 +19,7 @@
                     <li><a href="http://localhost/DispensarioMedicoUAPA/views/ubicaciones/index.php">Ubicaciones</a></li>
                     <li><a href="http://localhost/DispensarioMedicoUAPA/views/tiposFarmacos/index.php">Tipos de Fármacos</a></li>
                     <hr/>
-                    <li><a href="#">Medicamentos</a></li>
+                    <li><a href="http://localhost/DispensarioMedicoUAPA/views/medicamentos/index.php">Medicamentos</a></li>
                     <hr/>
                     <li><a href="#">Médicos</a></li>
                     <li><a href="#">Pacientes</a></li>

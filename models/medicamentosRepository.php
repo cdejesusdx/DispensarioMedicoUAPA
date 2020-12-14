@@ -1,19 +1,23 @@
 <?php
-    class usuariosRepository {
+    class medicamentosRepository {
         
         private $db;
  
-        public function __construct($PDOConnection){ $this->db = $PDOConnection; } 
+        public function __construct($PDOConnection)
+        {
+            $this->db = $PDOConnection;
+        }
 
-        public function create($rol, $usuario, $nombre, $contrasena)
+        public function create($tipoFarmaco, $ubicacion, $marca, $descripcion, $dosis)
         {
             try
             {
-                 $statement = $this->db->prepare("CALL InsUsuario (?,?,?,?);");
-                 $statement->bindParam(1, $rol);
-                 $statement->bindParam(2, $usuario);
-                 $statement->bindParam(3, $nombre);
-                 $statement->bindParam(4, $contrasena);
+                 $statement = $this->db->prepare("CALL InsMedicamento (?,?,?,?,?);");
+                 $statement->bindParam(1, $tipoFarmaco);
+                 $statement->bindParam(2, $ubicacion);
+                 $statement->bindParam(3, $marca);
+                 $statement->bindParam(4, $descripcion);
+                 $statement->bindParam(5, $dosis);
                  
                  $result = $statement->execute();
                 
@@ -26,56 +30,19 @@
             }
         }
 
-        public function update($id, $rol, $usuario, $nombre, $activo, $bloqueado)
+        public function update($id, $tipoFarmaco, $ubicacion, $marca, $descripcion, $dosis, $estado)
         {
             try
             {
-                 $statement = $this->db->prepare("CALL ActUsuario (?,?,?,?,?,?);");
+                 $statement = $this->db->prepare("CALL ActMedicamento (?,?,?,?,?,?,?);");
                  $statement->bindParam(1, $id);
-                 $statement->bindParam(2, $rol);
-                 $statement->bindParam(3, $usuario);
-                 $statement->bindParam(4, $nombre);
-                 $statement->bindParam(5, $activo);
-                 $statement->bindParam(6, $bloqueado);
+                 $statement->bindParam(2, $tipoFarmaco);
+                 $statement->bindParam(3, $ubicacion);
+                 $statement->bindParam(4, $marca);
+                 $statement->bindParam(5, $descripcion);
+                 $statement->bindParam(6, $dosis);
+                 $statement->bindParam(7, $estado);
                 
-                 $result = $statement->execute();
-
-                return $result;
-            }
-            catch(PDOException $e)
-            {
-                echo $e->getMessage(); 
-                return false;
-            }
-        }
-
-        public function updateLastLogin($id)
-        {
-            try
-            {
-                 $statement = $this->db->prepare("CALL ActUsuarioUltimoInicioSesion (?);");
-                 $statement->bindParam(1, $id);
-                
-                 $result = $statement->execute();
-
-                return $result;
-            }
-            catch(PDOException $e)
-            {
-                echo $e->getMessage(); 
-                return false;
-            }
-        }
-
-
-        public function changePassword($id, $contrasena)
-        {
-            try
-            {
-                 $statement = $this->db->prepare("CALL ActUsuarioCambiarContrasena (?,?);");
-                 $statement->bindParam(1, $id);
-                 $statement->bindParam(2, $contrasena);
-
                  $result = $statement->execute();
 
                 return $result;
@@ -91,7 +58,7 @@
         {
             try
             {
-                 $statement = $this->db->prepare("CALL DelUsuario (?);");
+                 $statement = $this->db->prepare("CALL DelMedicamento (?);");
                  $statement->bindParam(1, $id);
                 
                  $result = $statement->execute();
@@ -106,25 +73,11 @@
 
         public function selectById($id)
         {
-            $statement = $this->db->prepare("CALL ConsUsuarioPorId (?);");
-            $statement->bindParam(1, $id);
-            $statement->execute();
-            
+            $statement = $this->db->prepare("SELECT * FROM Medicamentos WHERE IdMedicamento = ?");
+            $statement->execute([$id]);
             $updateRow = $statement->fetch(PDO::FETCH_OBJ);          
             return $updateRow;
         }
-
-        public function selectUsuario($usuario, $contrasena)
-        {
-            $statement = $this->db->prepare("CALL ConsUsuarioPorUsuarioContrasena (?, ?);");
-            $statement->bindParam(1, $usuario);
-            $statement->bindParam(2, $contrasena);
-            $statement->execute();
-            
-            $selectRow = $statement->fetch(PDO::FETCH_NUM);          
-            return $selectRow;
-        }
-      
       
         public function dataView($query)
         {
@@ -136,27 +89,22 @@
                 while($row = $statement->fetch(PDO::FETCH_ASSOC))
                 {
                     ?>
-                        <tr class="<?php print($row['Estado']) == 'No' ? 'danger' : '';?> <?php print($row['Bloqueado']) == 'Si' ? 'danger' : '';?>">
+                        <tr class="<?php print($row['Estado']) == 'Activo' ? '' : 'danger';?>">
                             
-                            <td><?php print($row['IdUsuario']); ?></td>
-                            <td><?php print($row['Rol']); ?></td>
-                            <td><?php print($row['Usuario']); ?></td>
-                            <td><?php print($row['Nombre']); ?></td>
-                            <td style="text-align: center;"><?php print($row['UltimoInicioSesion']); ?></td>
-                            <td style="text-align: center;"><?php print($row['Bloqueado']); ?></td>
+                            <td><?php print($row['IdMedicamento']); ?></td>
+                            <td><?php print($row['TipoFarmaco']); ?></td>
+                            <td><?php print($row['Ubicacion']); ?></td>
+                            <td><?php print($row['Marca']); ?></td>
+                            <td><?php print($row['Descripcion']); ?></td>
+                            <td><?php print($row['Dosis']); ?></td>
                             <td style="text-align: center;"><?php print($row['Estado']); ?></td>
-
+                           
                             <td style="text-align: center;">
-                                <a href="update.php?updateId=<?php print($row['IdUsuario']); ?>"><i class="glyphicon glyphicon-edit" title="Modificar usuario"></i></a>
+                                <a href="update.php?updateId=<?php print($row['IdMedicamento']); ?>"><i class="glyphicon glyphicon-edit"></i></a>
                             </td>
-
+                            
                             <td style="text-align: center;">
-                                <a href="changePassword.php?changeId=<?php print($row['IdUsuario']); ?>"><i class="glyphicon glyphicon-lock" title="Cambiar contraseña"></i></a>
-                            </td>
-
-                            <td style="text-align: center;">
-                                <a href="delete.php?deleteId=<?php print($row['IdUsuario']); ?>"  title="Eliminar usuario"
-                                   onClick="return confirm('¿Está seguro que desea eliminar este registro?');" >
+                                <a href="delete.php?deleteId=<?php print($row['IdMedicamento']); ?>" onClick="return confirm('¿Está seguro que desea eliminar este registro?');" >
                                     <i class="glyphicon glyphicon-remove-circle"></i>
                                 </a>
                             </td>

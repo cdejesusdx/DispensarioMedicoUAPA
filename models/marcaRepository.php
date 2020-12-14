@@ -64,6 +64,15 @@
             }
         }
 
+        public function getAll()
+        {
+            $statement = $this->db->prepare("CALL ConsMarcas();");
+            $statement->execute();
+            $listRows = $statement->fetchAll(PDO::FETCH_OBJ);         
+            
+            return $listRows;
+        }
+
         public function getById($id)
         {
             $statement = $this->db->prepare("SELECT * FROM Marcas WHERE IdMarca = ?");
@@ -103,7 +112,7 @@
             {
                 ?>
                     <tr>
-                        <td>No hay registro...</td>
+                        <td colspan="10">No hay registro...</td>
                     </tr>
                 <?php
             }
