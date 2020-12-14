@@ -1,26 +1,379 @@
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `DelMarca`(IN `id` INT)
-DELETE FROM marcas WHERE IdMarca = id$$
-DELIMITER ;
+-- phpMyAdmin SQL Dump
+-- version 5.0.4
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Dec 14, 2020 at 10:53 PM
+-- Server version: 10.4.16-MariaDB
+-- PHP Version: 7.4.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `test`
+--
 
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `InsMarca`(IN `descripcion` VARCHAR(200), IN `estado` TINYINT(1))
-INSERT INTO marcas (descripcion, estado)
-VALUES (descripcion, estado)$$
-DELIMITER ;
-
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsMarcas`()
-SELECT IdMarca,
-	Descripcion,
-     CASE WHEN Estado = 1 THEN 'Activa' ELSE 'Inactiva' END Estado
-FROM marcas$$
-DELIMITER ;
-
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `ActMarca`(IN `id` INT, IN `descripcion` VARCHAR(200), IN `estado` TINYINT(1))
-UPDATE marcas
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ActMarca` (IN `id` INT, IN `descripcion` VARCHAR(200), IN `estado` TINYINT(1))  UPDATE marcas
 	SET descripcion = descripcion,
     	estado = estado
     WHERE IdMarca = id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ActMedicamento` (IN `id` INT(10), IN `tipoFarmaco` VARCHAR(100), IN `ubicacion` VARCHAR(100), IN `marca` VARCHAR(100), IN `descripcion` VARCHAR(100), IN `dosis` VARCHAR(100), IN `estado` TINYINT(1))  NO SQL
+UPDATE medicamentos
+	SET IdTipoFarmaco = tipoFarmaco,
+    	IdUbicacion = ubicacion,
+        IdMarca = marca,
+        Descripcion = descripcion,
+        Dosis = dosis,
+        Estado = estado
+    WHERE IdMedicamento = id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ActUsuario` (IN `Id` INT(10), IN `Rol` INT(10), IN `Usuario` VARCHAR(50), IN `Nombre` VARCHAR(100), IN `Activo` TINYINT(1), IN `Bloqueado` TINYINT(1))  UPDATE usuarios
+	SET IdRol = Rol,
+    	Usuario = Usuario,
+        Nombre = Nombre,
+        Activo = Activo,
+        Bloqueado = Bloqueado
+    WHERE IdUsuario = Id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ActUsuarioCambiarContrasena` (IN `id` INT(10), IN `contrasena` VARCHAR(200))  UPDATE usuarios
+	SET contrasena = contrasena
+    WHERE IdUsuario = id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ActUsuarioUltimoInicioSesion` (IN `id` INT(10))  UPDATE usuarios
+	SET UltimoInicioSesion = SYSDATE()
+    WHERE IdUsuario = id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsMarcas` ()  SELECT IdMarca,
+	Descripcion,
+     CASE WHEN Estado = 1 THEN 'Activa' ELSE 'Inactiva' END Estado
+FROM marcas$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsMedicamentos` ()  SELECT a.IdMedicamento,
+	a.IdTipoFarmaco,
+    b.Descripcion TipoFarmaco,
+    a.IdUbicacion,
+    c.Descripcion Ubicacion,
+    a.IdMarca,
+    d.Descripcion Marca,
+	a.Descripcion,
+   	a.Dosis,
+    CASE WHEN a.Estado = 1 THEN 'Activo' ELSE 'Inactivo' END Estado
+FROM medicamentos a 
+	inner join tiposfarmacos b on a.IdTipoFarmaco = b.IdTipoFarmaco
+    inner join ubicaciones c on a.IdUbicacion = c.IdUbicacion
+    inner join marcas d on a.IdMarca = d.IdMarca
+ORDER BY a.IdMedicamento$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsRoles` ()  SELECT IdRol,
+	Descripcion,
+     CASE WHEN Activo = 1 THEN 'Si' ELSE 'No' END Activo
+FROM roles$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsTiposFarmacos` ()  SELECT IdTipoFarmaco,
+	Descripcion,
+    CASE WHEN Estado = 1 THEN 'Activa' ELSE 'Inactiva' END Estado
+FROM tiposfarmacos$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsUbicaciones` ()  SELECT IdUbicacion,
+	Descripcion,
+    Estante,
+    Tramo,
+    Casilla,
+    CASE WHEN Estado = 1 THEN 'Activa' ELSE 'Inactiva' END Estado
+FROM ubicaciones$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsUsuarioPorId` (IN `Id` INT)  SELECT * FROM usuarios WHERE IdUsuario = id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsUsuarioPorUsuarioContrasena` (IN `uUsuario` VARCHAR(50), IN `uContrasena` VARCHAR(50))  SELECT * FROM usuarios 
+WHERE usuario = uUsuario 
+	AND contrasena = uContrasena$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ConsUsuarios` ()  SELECT A.IdUsuario,
+	A.IdRol,
+    B.Descripcion Rol,
+    A.Usuario,
+    A.Nombre,
+    A.Contrasena,
+    CASE WHEN A.Activo = 1 THEN 'Si' ELSE 'No' END Activo,
+    CASE WHEN A.Bloqueado = 1 THEN 'Si' ELSE 'No' END Bloqueado,
+    A.UltimoInicioSesion,
+    A.IntentosInicioSesion
+FROM usuarios A
+	INNER JOIN roles B ON A.IdRol = B.IdRol
+ ORDER BY IdUsuario$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DelMarca` (IN `id` INT)  DELETE FROM marcas WHERE IdMarca = id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DelMedicamento` (IN `id` INT(10))  DELETE FROM medicamentos WHERE IdMedicamento = id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `DelUsuario` (IN `id` INT(10))  DELETE FROM usuarios WHERE IdUsuario = id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsMarca` (IN `descripcion` VARCHAR(200), IN `estado` TINYINT(1))  INSERT INTO marcas (descripcion, estado)
+VALUES (descripcion, estado)$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsMedicamento` (IN `tipoFarmaco` INT(10), IN `ubicacion` INT(10), IN `marca` INT(10), IN `descripcion` VARCHAR(100), IN `dosis` VARCHAR(100))  INSERT INTO medicamentos(IdTipoFarmaco, IdUbicacion, IdMarca, Descripcion, Dosis)
+VALUES (tipoFarmaco, ubicacion, marca, descripcion, dosis)$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `InsUsuario` (IN `IdRol` INT, IN `Usuario` VARCHAR(50), IN `Nombre` VARCHAR(100), IN `Contrasena` VARCHAR(200))  INSERT INTO usuarios (IdRol, Usuario, Nombre, Contrasena)
+VALUES (IdRol, Usuario, Nombre, Contrasena)$$
+
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `marcas`
+--
+
+CREATE TABLE `marcas` (
+  `IdMarca` int(11) NOT NULL,
+  `Descripcion` varchar(200) NOT NULL,
+  `Estado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `marcas`
+--
+
+INSERT INTO `marcas` (`IdMarca`, `Descripcion`, `Estado`) VALUES
+(1, 'Fabricantes', 1),
+(2, 'Laboratorios AX', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `medicamentos`
+--
+
+CREATE TABLE `medicamentos` (
+  `IdMedicamento` int(10) NOT NULL,
+  `IdTipoFarmaco` int(10) NOT NULL,
+  `IdUbicacion` int(10) NOT NULL,
+  `IdMarca` int(10) NOT NULL,
+  `Descripcion` varchar(100) NOT NULL,
+  `Dosis` varchar(50) DEFAULT NULL,
+  `Estado` bit(1) NOT NULL DEFAULT b'1'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `medicamentos`
+--
+
+INSERT INTO `medicamentos` (`IdMedicamento`, `IdTipoFarmaco`, `IdUbicacion`, `IdMarca`, `Descripcion`, `Dosis`, `Estado`) VALUES
+(1, 1, 1, 1, 'Medicamento #1', '12cm', b'1'),
+(2, 3, 3, 2, 'Medicamento #2', '12cm', b'1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `roles`
+--
+
+CREATE TABLE `roles` (
+  `IdRol` int(10) NOT NULL,
+  `Descripcion` varchar(100) NOT NULL,
+  `Activo` bit(1) NOT NULL DEFAULT b'1'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `roles`
+--
+
+INSERT INTO `roles` (`IdRol`, `Descripcion`, `Activo`) VALUES
+(1, 'Administrador', b'1'),
+(2, 'Colaborador', b'1'),
+(3, 'Médico', b'1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tiposfarmacos`
+--
+
+CREATE TABLE `tiposfarmacos` (
+  `IdTipoFarmaco` int(10) NOT NULL,
+  `Descripcion` varchar(100) NOT NULL,
+  `Estado` bit(1) NOT NULL DEFAULT b'1'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tiposfarmacos`
+--
+
+INSERT INTO `tiposfarmacos` (`IdTipoFarmaco`, `Descripcion`, `Estado`) VALUES
+(1, 'Pastillas', b'1'),
+(2, 'Capsulas', b'1'),
+(3, 'Jarabe', b'1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ubicaciones`
+--
+
+CREATE TABLE `ubicaciones` (
+  `IdUbicacion` int(10) NOT NULL,
+  `Descripcion` varchar(100) NOT NULL,
+  `Estante` varchar(50) NOT NULL,
+  `Tramo` varchar(50) NOT NULL,
+  `Casilla` varchar(50) NOT NULL,
+  `Estado` bit(1) NOT NULL DEFAULT b'1'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `ubicaciones`
+--
+
+INSERT INTO `ubicaciones` (`IdUbicacion`, `Descripcion`, `Estante`, `Tramo`, `Casilla`, `Estado`) VALUES
+(1, 'Pasillo A', '5-A', '001', '22', b'1'),
+(2, 'Pasillo B', '8-B', '005', '13', b'1'),
+(3, 'Pasillo C', '6-C', '002', '10', b'1'),
+(4, 'Pasillo D', '1-A', '001', '3', b'1'),
+(5, 'Pasillo E', '6-C', '002', '10', b'1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `usuarios`
+--
+
+CREATE TABLE `usuarios` (
+  `IdUsuario` int(10) NOT NULL,
+  `IdRol` int(10) NOT NULL,
+  `Usuario` varchar(50) NOT NULL,
+  `Nombre` varchar(100) NOT NULL,
+  `Contrasena` varchar(200) NOT NULL,
+  `Activo` bit(1) NOT NULL DEFAULT b'1',
+  `Bloqueado` bit(1) NOT NULL DEFAULT b'0',
+  `UltimoInicioSesion` datetime DEFAULT NULL,
+  `IntentosInicioSesion` tinyint(4) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `usuarios`
+--
+
+INSERT INTO `usuarios` (`IdUsuario`, `IdRol`, `Usuario`, `Nombre`, `Contrasena`, `Activo`, `Bloqueado`, `UltimoInicioSesion`, `IntentosInicioSesion`) VALUES
+(1, 2, 'cbautista', 'Carlos Bautista', '202cb962ac59075b964b07152d234b70', b'1', b'0', '2020-12-14 11:31:32', 0),
+(2, 1, 'hcastillo', 'Henry Castillo', '202cb962ac59075b964b07152d234b70', b'1', b'0', '2020-12-14 12:06:41', 0),
+(5, 1, 'jdejesus', 'Janibel De Jesús', '202cb962ac59075b964b07152d234b70', b'1', b'0', '2020-12-14 13:53:08', NULL);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `marcas`
+--
+ALTER TABLE `marcas`
+  ADD PRIMARY KEY (`IdMarca`);
+
+--
+-- Indexes for table `medicamentos`
+--
+ALTER TABLE `medicamentos`
+  ADD PRIMARY KEY (`IdMedicamento`),
+  ADD KEY `FKTipoFarmaco` (`IdTipoFarmaco`),
+  ADD KEY `FKUbicacion` (`IdUbicacion`),
+  ADD KEY `FKMarca` (`IdMarca`);
+
+--
+-- Indexes for table `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`IdRol`);
+
+--
+-- Indexes for table `tiposfarmacos`
+--
+ALTER TABLE `tiposfarmacos`
+  ADD PRIMARY KEY (`IdTipoFarmaco`);
+
+--
+-- Indexes for table `ubicaciones`
+--
+ALTER TABLE `ubicaciones`
+  ADD PRIMARY KEY (`IdUbicacion`);
+
+--
+-- Indexes for table `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`IdUsuario`),
+  ADD KEY `FKRolUsuario` (`IdRol`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `marcas`
+--
+ALTER TABLE `marcas`
+  MODIFY `IdMarca` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `medicamentos`
+--
+ALTER TABLE `medicamentos`
+  MODIFY `IdMedicamento` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `IdRol` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `tiposfarmacos`
+--
+ALTER TABLE `tiposfarmacos`
+  MODIFY `IdTipoFarmaco` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `ubicaciones`
+--
+ALTER TABLE `ubicaciones`
+  MODIFY `IdUbicacion` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `IdUsuario` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `medicamentos`
+--
+ALTER TABLE `medicamentos`
+  ADD CONSTRAINT `FKMarca` FOREIGN KEY (`IdMarca`) REFERENCES `marcas` (`IdMarca`),
+  ADD CONSTRAINT `FKTipoFarmaco` FOREIGN KEY (`IdTipoFarmaco`) REFERENCES `tiposfarmacos` (`IdTipoFarmaco`),
+  ADD CONSTRAINT `FKUbicacion` FOREIGN KEY (`IdUbicacion`) REFERENCES `ubicaciones` (`IdUbicacion`);
+
+--
+-- Constraints for table `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD CONSTRAINT `FKRolUsuario` FOREIGN KEY (`IdRol`) REFERENCES `roles` (`IdRol`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
