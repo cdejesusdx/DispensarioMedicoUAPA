@@ -24,7 +24,7 @@
         }
     }
 
-    if(isset($_POST['btnIniciarSesion'])){
+    if(isset($_POST['btnIniciarSesion'])){        
         $usuario = $_POST["usuario"];
         $contrasena = $_POST["contrasena"];
 
@@ -32,18 +32,21 @@
        
         if($selectRow == true){
     
+            $id = $selectRow[0];
             $rol = $selectRow[1];
             $nombreUsuario = $selectRow[3];
-           
+
+            $CrudUsuarios->updateLastLogin($id);
+            
             $_SESSION["rol"] = $rol;
             $_SESSION["nombreUsuario"] = $nombreUsuario;
 
             switch($_SESSION["rol"]){
                 case 1:
-                    header("location: ../../header.php");
+                    header("location: ../../home.php");
                     break;
                 case 2:
-                    header("location: ../../header.php");
+                    header("location: ../../home.php");
                     break;
     
                 default:
@@ -166,7 +169,7 @@
             <div class="col-sm-6 col-md-4 col-md-offset-4">
                 <h1 class="text-center login-title">Inicio de Sesión</h1>
                 <div class="account-wall">
-                    <img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120" alt="">
+                    <img class="profile-img" src="../../views/img/noUser.jpg" alt="">
                     <form class="form-signin" method='post'>
                         <input type="text" class="form-control" name="usuario" placeholder="Usuario" required autofocus>
                         <input type="password" class="form-control" name='contrasena' placeholder="Contraseña" required>

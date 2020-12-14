@@ -49,6 +49,25 @@
             }
         }
 
+        public function updateLastLogin($id)
+        {
+            try
+            {
+                 $statement = $this->db->prepare("CALL ActUsuarioUltimoInicioSesion (?);");
+                 $statement->bindParam(1, $id);
+                
+                 $result = $statement->execute();
+
+                return $result;
+            }
+            catch(PDOException $e)
+            {
+                echo $e->getMessage(); 
+                return false;
+            }
+        }
+
+
         public function changePassword($id, $contrasena)
         {
             try
@@ -123,9 +142,10 @@
                             <td><?php print($row['Rol']); ?></td>
                             <td><?php print($row['Usuario']); ?></td>
                             <td><?php print($row['Nombre']); ?></td>
-                            <td style="text-align: center;"><?php print($row['Activo']); ?></td>
+                            <td style="text-align: center;"><?php print($row['UltimoInicioSesion']); ?></td>
                             <td style="text-align: center;"><?php print($row['Bloqueado']); ?></td>
-                            
+                            <td style="text-align: center;"><?php print($row['Activo']); ?></td>
+
                             <td style="text-align: center;">
                                 <a href="update.php?updateId=<?php print($row['IdUsuario']); ?>"><i class="glyphicon glyphicon-edit" title="Modificar usuario"></i></a>
                             </td>
