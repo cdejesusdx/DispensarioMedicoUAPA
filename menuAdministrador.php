@@ -16,8 +16,8 @@
                 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                     <li><a href="http://localhost/DispensarioMedicoUAPA/views/marcas/index.php">Marcas</a></li>
-                    <li><a href="#">Ubicaciones</a></li>
-                    <li><a href="#">Tipos de Fármacos</a></li>
+                    <li><a href="http://localhost/DispensarioMedicoUAPA/views/ubicaciones/index.php">Ubicaciones</a></li>
+                    <li><a href="http://localhost/DispensarioMedicoUAPA/views/tiposFarmacos/index.php">Tipos de Fármacos</a></li>
                     <hr/>
                     <li><a href="#">Medicamentos</a></li>
                     <hr/>
