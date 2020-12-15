@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 14, 2020 at 10:51 PM
+-- Generation Time: Dec 15, 2020 at 03:44 AM
 -- Server version: 10.4.16-MariaDB
 -- PHP Version: 7.4.12
 
@@ -267,9 +267,9 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`IdUsuario`, `IdRol`, `Usuario`, `Nombre`, `Contrasena`, `Activo`, `Bloqueado`, `UltimoInicioSesion`, `IntentosInicioSesion`) VALUES
-(1, 2, 'cbautista', 'Carlos Bautista', '202cb962ac59075b964b07152d234b70', b'1', b'0', '2020-12-14 11:31:32', 0),
-(2, 1, 'hcastillo', 'Henry Castillo', '202cb962ac59075b964b07152d234b70', b'1', b'0', '2020-12-14 12:06:41', 0),
-(5, 1, 'jdejesus', 'Janibel De Jesús', '202cb962ac59075b964b07152d234b70', b'1', b'0', '2020-12-14 13:53:08', NULL);
+(1, 1, 'cbautista', 'Carlos Bautista', '202cb962ac59075b964b07152d234b70', b'1', b'0', '2020-12-14 21:27:27', 0),
+(2, 2, 'hcastillo', 'Henry Castillo', '202cb962ac59075b964b07152d234b70', b'1', b'0', '2020-12-14 21:26:48', 0),
+(5, 3, 'jdejesus', 'Janibel De Jesús', '202cb962ac59075b964b07152d234b70', b'1', b'0', '2020-12-14 21:23:41', NULL);
 
 --
 -- Indexes for dumped tables
